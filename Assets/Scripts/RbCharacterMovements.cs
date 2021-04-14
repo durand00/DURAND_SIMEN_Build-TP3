@@ -15,6 +15,8 @@ public class RbCharacterMovements : MonoBehaviour
 
     private Vector3 moveDirection;
 
+    private Animator player;
+
     private Rigidbody rb;
 
     private bool isGrounded = true;
@@ -24,6 +26,9 @@ public class RbCharacterMovements : MonoBehaviour
     {
         // Assigner le Rigidbody
         rb = GetComponent<Rigidbody>();
+
+        // Assigner l'animator
+        player = GetComponent<Animator>();
     }
 
     // Update is called once per frame
@@ -39,8 +44,13 @@ public class RbCharacterMovements : MonoBehaviour
         inputHorizontal = Input.GetAxis("Horizontal");
 
         // Vecteur de mouvements (Avant/arrière + Gauche/Droite)
-        moveDirection = transform.forward * inputVertical + transform.right * inputHorizontal;  
-        
+        moveDirection = transform.forward * inputVertical + transform.right * inputHorizontal;
+
+        //  animations de mouvements
+
+        player.SetFloat("Horizontal", inputHorizontal);
+        player.SetFloat("Vertical", inputVertical);
+
         // Sauter
         if (Input.GetButtonDown("Jump") && isGrounded == true)
         {
