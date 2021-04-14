@@ -1,16 +1,10 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
 
 public class RbCharacterMovements : MonoBehaviour
 {
-    public float walkingSpeed = 1.5f;
-
-    public float runningSpeed = 5f;
-
-    private float speed = 1f;
-
+    public float speed = 0.1f;
     public float jumpHeight = 1f;
 
     // Transform de la position des pieds
@@ -25,16 +19,11 @@ public class RbCharacterMovements : MonoBehaviour
 
     private bool isGrounded = true;
 
-    private Animator animatorPeasantMan;
-
     // Start is called before the first frame update
     void Start()
     {
         // Assigner le Rigidbody
         rb = GetComponent<Rigidbody>();
-
-        // Assigner l'animator
-        animatorPeasantMan = GetComponent<Animator>();
     }
 
     // Update is called once per frame
@@ -56,31 +45,12 @@ public class RbCharacterMovements : MonoBehaviour
         if (Input.GetButtonDown("Jump") && isGrounded == true)
         {
             rb.AddForce(Vector3.up * Mathf.Sqrt(jumpHeight * -2f * Physics.gravity.y), ForceMode.VelocityChange);
-            animatorPeasantMan.SetTrigger("Jump");
         }
-
-       
-
-        // Courir
-        if (Input.GetKey(KeyCode.LeftShift))
-        {
-            speed = runningSpeed;
-            animatorPeasantMan.SetFloat("vertical", inputVertical*2f);
-            animatorPeasantMan.SetFloat("horizontal", inputHorizontal*2f);
-        }
-        else
-        {
-            speed = walkingSpeed;
-            animatorPeasantMan.SetFloat("vertical", inputVertical);
-            animatorPeasantMan.SetFloat("horizontal", inputHorizontal);
-        }
-            
-
     }
 
     private void FixedUpdate()
     {
         // Déplacer le personnage selon le vecteur de direction
-        rb.MovePosition(rb.position + moveDirection.normalized * speed * Time.fixedDeltaTime);
+        rb.MovePosition(rb.position + moveDirection * speed * Time.fixedDeltaTime);
     }
 }
