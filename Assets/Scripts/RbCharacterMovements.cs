@@ -4,8 +4,12 @@ using UnityEngine;
 
 public class RbCharacterMovements : MonoBehaviour
 {
-    public float speed = 0.1f;
+    private float speed = 0.1f;
     public float jumpHeight = 1f;
+
+    public float walkingSpeed = 1.5f;
+    public float runningSpeed = 5f;
+
 
     // Transform de la position des pieds
     public Transform feetPosition;
@@ -46,21 +50,35 @@ public class RbCharacterMovements : MonoBehaviour
         // Vecteur de mouvements (Avant/arrière + Gauche/Droite)
         moveDirection = transform.forward * inputVertical + transform.right * inputHorizontal;
 
-        //  animations de mouvements
-
-        player.SetFloat("Horizontal", inputHorizontal);
-        player.SetFloat("Vertical", inputVertical);
-
+       
         // Sauter
         if (Input.GetButtonDown("Jump") && isGrounded == true)
         {
             rb.AddForce(Vector3.up * Mathf.Sqrt(jumpHeight * -2f * Physics.gravity.y), ForceMode.VelocityChange);
+            player.SetTrigger("Jump");
+        }
+
+        // Animations du mouvement
+        
+
+        // Courir
+        if (Input.GetKey(KeyCode.LeftShift))
+        {
+            speed = runningSpeed;
+            player.SetFloat("Vertical", inputVertical*2f);
+            player.SetFloat("Horizontal", inputHorizontal * 2f);
+        }
+        else
+        {
+            speed = walkingSpeed;
+            player.SetFloat("Vertical", inputVertical);
+            player.SetFloat("Horizontal", inputHorizontal);
         }
     }
 
     private void FixedUpdate()
     {
         // Déplacer le personnage selon le vecteur de direction
-        rb.MovePosition(rb.position + moveDirection * speed * Time.fixedDeltaTime);
+        rb.MovePosition(rb.position + moveDirection.normalized * speed * Time.fixedDeltaTime);
     }
 }
