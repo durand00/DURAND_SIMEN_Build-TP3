@@ -54,8 +54,15 @@ public class RbCharacterMovements : MonoBehaviour
         // Sauter
         if (Input.GetButtonDown("Jump") && isGrounded == true)
         {
-            rb.AddForce(Vector3.up * Mathf.Sqrt(jumpHeight * -2f * Physics.gravity.y), ForceMode.VelocityChange);
+            //rb.AddForce(Vector3.up * Mathf.Sqrt(jumpHeight * -2f * Physics.gravity.y), ForceMode.VelocityChange);
             player.SetTrigger("Jump");
+        }
+
+        // Sauter à l'échelle
+        if(Input.GetKeyDown(KeyCode.E) && isGrounded == true)
+        {
+            rb.AddForce(Vector3.up * Mathf.Sqrt(jumpHeight * -2f * Physics.gravity.y), ForceMode.VelocityChange);
+            player.SetTrigger("Climb");
         }
 
         // Animations du mouvement
